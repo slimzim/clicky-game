@@ -1,15 +1,14 @@
 import React from "react";
 import "./style.css";
 
-function FriendCard(props) {
+function Card(props) {
   return (
-    <div className="card">
+    <div className="card" onClick={() => props.userGuess(props.id)}>
       <div className="img-container">
         <img alt={props.name} src={props.image} />
       </div>
-      <span onClick={() => props.removeFriend(props.id)} className="remove">𝘅</span>
     </div>
   );
 }
 
-export default FriendCard;
+export default Card;

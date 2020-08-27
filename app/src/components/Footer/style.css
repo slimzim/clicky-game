@@ -1,0 +1,26 @@
+footer {
+    background: #5133a4;
+    padding: 20px 20px 20px 20px;
+    min-height: 50px;
+    width: 100%;
+    color: #fff;
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: -20px;
+    position:absolute;
+    left:0;
+    bottom:0;
+    right:0;
+    text-align: center;
+}
+
+h3 {
+    display: inline
+}
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}

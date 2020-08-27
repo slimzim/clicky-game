@@ -1,36 +1,75 @@
 import React, { Component } from "react";
-import FriendCard from "./components/FriendCard";
+import Card from "./components/Card";
+import Nav from "./components/Nav";
+import Footer from "./components/Footer";
 import Wrapper from "./components/Wrapper";
-import friends from "./friends.json";
+import cards from "./cards.json";
 import "./App.css";
+import Header from "./components/Header";
 
 class App extends Component {
 
   state = {
-    friends
+    cards,
+    alreadyGuessed: [],
+    topScore: 0,
+    instructions: "Click an image to begin!"
   }
 
-  removeFriend = id => {
-    // filter this.state.friends for friends with an id not equal to the id being removed
-    const friends = this.state.friends.filter(friend => friend.id !== id);
-    // Set this.state.friends equal to the new friends array
-    this.setState({ friends })
+  userGuess = id => {
+    if (this.state.alreadyGuessed.includes(id)) {
+      this.setState({ 
+        instructions: "You guessed incorrectly!",
+        alreadyGuessed: [],   
+      })
+    } else {
+      this.setState({ 
+        instructions: "You guessed correctly!"      
+      })
+      this.state.alreadyGuessed.push(id)
+      if (this.state.alreadyGuessed.length > this.state.topScore) {
+        this.incrementTopScore()
+      } if (this.state.alreadyGuessed.length === 12) {
+        this.setState({ instructions: "You win!" })
+      }
+    }
+    this.shuffleArray(this.state.cards)
+  }
+
+  incrementTopScore = () => {
+    this.setState(() => {
+      // Important: read `state` instead of `this.state` when updating.
+      return {topScore: this.state.topScore + 1}
+    });
+    console.log(this.state.alreadyGuessed.length)
+  }  
+
+  shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    this.setState({ cards: array })
   }
 
   render() {
     return (
     <Wrapper>
-      <h1 className="title">Friends List</h1>
-      {this.state.friends.map(friend => ( 
-        <FriendCard
-        removeFriend={this.removeFriend}
-        id={friend.id}
-        name={friend.name}
-        image={friend.image}
-        occupation={friend.occupation}
-        location={friend.location}
+      <Nav 
+        score={this.state.alreadyGuessed.length}
+        instructions={this.state.instructions}
+        topScore={this.state.topScore}
+      />
+      <Header />
+      {this.state.cards.map(card => ( 
+        <Card
+        userGuess={this.userGuess}
+        id={card.id}
+        key={card.id}
+        image={card.image}
       />
       ))}
+      <Footer />
     </Wrapper>
     )
   }
